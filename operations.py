@@ -4,6 +4,7 @@ import pickle
 from sklearn.model_selection import RandomizedSearchCV, cross_val_score
 from sklearn.metrics import accuracy_score, f1_score, roc_auc_score, precision_score, recall_score
 from sklearn.metrics import r2_score, mean_absolute_error
+from imblearn.metrics import specificity_score
 
 class OutlierRemover:
     def __init__(self, start=None, stop=None):
@@ -124,19 +125,19 @@ def get_cross_validation_scores(X, y, model, task: str):
         recall = cross_val_score(model, X, y, cv=5, scoring='recall', n_jobs=-1)
         f1 = cross_val_score(model, X, y, cv=5, scoring='f1', n_jobs=-1)
         roc = cross_val_score(model, X, y, cv=5, scoring='roc_auc', n_jobs=-1)
-        return [accuracy, precision, recall, f1, roc]
+        return {"Accuracy": accuracy, "Precision": precision, "Recall": recall, "F1 Score": f1, "ROC Area": roc}
         
     elif task == 'multi-class':
         accuracy = cross_val_score(model, X, y, cv=5, scoring='accuracy', n_jobs=-1)
         precision = cross_val_score(model, X, y, cv=5, scoring='precision_macro', n_jobs=-1)
         recall = cross_val_score(model, X, y, cv=5, scoring='recall_macro', n_jobs=-1)
         f1 = cross_val_score(model, X, y, cv=5, scoring='f1_macro', n_jobs=-1)
-        return [accuracy, precision, recall, f1]
+        return {"Accuracy": accuracy, "Precision": precision, "Recall": recall, "F1 Score": f1}
 
     else:
         r2 = cross_val_score(model, X, y, cv=5, scoring='r2', n_jobs=-1)
         mae = cross_val_score(model, X, y, cv=5, scoring='neg_mean_absolute_error', n_jobs=-1)
-        return [r2, -mae]
+        return {"R2 Score": r2, "MAE": -mae}
 
 
 def get_evaluation_metrics(X, y, model, task):
@@ -156,18 +157,20 @@ def get_evaluation_metrics(X, y, model, task):
         accuracy = accuracy_score(y, model.predict(X))
         precision = precision_score(y, model.predict(X))
         recall = recall_score(y, model.predict(X))
+        specificity = specificity_score(y, model.predict(X))
         f1 = f1_score(y, model.predict(X))
         roc = roc_auc_score(y, model.predict_proba(X)[:, 1])
-        return [accuracy, precision, recall, f1, roc]
+        return {"Accuracy": accuracy, "Precision": precision, "Recall": recall, "Specificity": specificity, "F1 Score": f1, "ROC Area": roc}
         
     elif task == 'multi-class':
         accuracy = accuracy_score(y, model.predict(X))
         precision = precision_score(y, model.predict(X), average='macro')
         recall = recall_score(y, model.predict(X), average='macro')
+        specificity = specificity_score(y, model.predict(X), average='macro')
         f1 = f1_score(y, model.predict(X), average='macro')
-        return [accuracy, precision, recall, f1]
+        return {"Accuracy": accuracy, "Precision": precision, "Recall": recall, "Specificity": specificity, "F1 Score": f1}
 
     else:
         r2 = r2_score(y, model.predict(X))
         mae = mean_absolute_error(y, model.predict(X))
-        return [r2, -mae]
+        return {"R2 Score": r2, "MAE": -mae}

@@ -8,13 +8,13 @@ from imblearn.metrics import specificity_score
 
 class OutlierRemover:
     def __init__(self, start=None, stop=None):
-    """
-    An object to handle outliers in dataframe.
+        """
+        An object to handle outliers in dataframe.
 
-    args:
-        start: index of the column from which outliers needs to be removed
-        end: index of the column upto which outliers needs to be removed
-    """
+        args:
+            start: index of the column from which outliers needs to be removed
+            end: index of the column upto which outliers needs to be removed
+        """
         self.upper_bounds = None
         self.lower_bounds = None
         self.start = start
@@ -141,7 +141,7 @@ def get_cross_validation_scores(X, y, model, task: str):
 
 
 def get_evaluation_metrics(X, y, model, task):
-     """
+    """
     Calculates average performance of ML model. It is usually preferred for the testing set.
 
     args:
@@ -153,6 +153,7 @@ def get_evaluation_metrics(X, y, model, task):
     returns:
         list of all metrics
     """
+    
     if task == 'binary-class':
         accuracy = accuracy_score(y, model.predict(X))
         precision = precision_score(y, model.predict(X))

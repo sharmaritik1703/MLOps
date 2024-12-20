@@ -11,6 +11,7 @@ class OOFClassifier(BaseEstimator, ClassifierMixin):
             base_models (list): List of base models (must support `fit` and `predict_proba`).
             meta_model: Meta model (must support `fit` and `predict`).
         """
+        super().__init__()
         self.base_models = base_models
         self.meta_model = meta_model
 
@@ -62,6 +63,7 @@ class OOFRegressor(BaseEstimator, RegressorMixin):
             base_models (list): List of base models (must support `fit` and `predict`).
             meta_model: Meta-model (must support `fit` and `predict`).
         """
+        super().__init__()
         self.base_models = base_models
         self.meta_model = meta_model
 

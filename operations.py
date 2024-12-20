@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import pickle
-from sklearn.model_selection import RandomizedSearchCV, cross_val_score
+from sklearn.model_selection import RandomizedSearchCV, cross_val_score, KFold, StratifiedKFold
 from sklearn.metrics import accuracy_score, f1_score, roc_auc_score, precision_score, recall_score
 from sklearn.metrics import r2_score, mean_absolute_error
 from imblearn.metrics import specificity_score
@@ -86,22 +86,26 @@ def load_model(file_path):
     return model
 
 
-def get_hypertuned_model(X, y, model, param_grid, score_metric):
+def get_hypertuned_model(X, y, model, param_grid, score_metric, imbalance: bool = False):
     """
     Get the optimal version of a machine learning model using its hyperparameters.
 
     args:
         X: features of the training set
         y: labels corresponding to features in the training set
-        model: ML model instance (e.g. logistic regression, linear regression, etc.)
+        model: ML model instance (e.g., logistic regression, linear regression, etc.)
         param_grid: A dictionary containing parameters and their possible values.
-        score_metric: The evaluation metrics for the task (e.g. accuracy, f1 score, MAE, RMSE)
+        score_metric: The evaluation metrics for the task (e.g., accuracy, f1 score, MAE, RMSE)
+        imbalance: False (for regression and balanced classes). You can set true for imbalance
 
     returns:
-        The hyper-tuned model along with the optimal parameters
+        The hyper-tuned model, along with the optimal parameters
     """
-    # Hyperparameter search instance!
-    search = RandomizedSearchCV(model, param_grid, cv=5, scoring=score_metric, random_state=10, n_jobs=-1)
+    # Selecting cross-validation type based upon data imbalance
+    kf = StratifiedKFold(n_splits=5, shuffle=True) if imbalance else KFold(n_splits=5, shuffle=True)
+    
+    # Hyperparameter search instance! 
+    search = RandomizedSearchCV(model, param_grid, cv=kf, scoring=score_metric, random_state=10, n_jobs=-1)
     search.fit(X, y)    # Training
     return search.best_estimator_, search.best_params_
 

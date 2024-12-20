@@ -27,7 +27,7 @@ class OOFClassifier:
 
         for model in self.base_models:
             model.fit(X, y)  # Fit the base model on the full dataset
-            oof_preds = cross_val_predict(model, X, y, cv=5, method="predict_proba")  # Generate out-of-fold predictions
+            oof_preds = cross_val_predict(model, X, y, cv=5, method="predict_proba", n_jobs=-1)  # Generate out-of-fold predictions
             meta_features.append(oof_preds)
             
 
@@ -81,7 +81,7 @@ class OOFRegressor:
 
         for model in self.base_models:
             model.fit(X, y)    # Train the original base model on the entire dataset
-            oof_preds = cross_val_predict(cloned_model, X, y, cv=5, method="predict")   # Generate out-of-fold predictions
+            oof_preds = cross_val_predict(cloned_model, X, y, cv=5, method="predict", n_jobs=-1)   # Generate out-of-fold predictions
             meta_features.append(oof_preds.reshape(-1, 1))  # Reshape for concatenation
             
         # Formation of meta-dataset!

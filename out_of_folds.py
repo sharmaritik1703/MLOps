@@ -27,6 +27,7 @@ class OOFClassifier(BaseEstimator, ClassifierMixin):
         for model in self.base_models:
             oof_preds = cross_val_predict(model, X, y, cv=5, method="predict_proba", n_jobs=-1)  # Generate out-of-fold predictions
             meta_features.append(oof_preds)
+            model.fit(X, y)
 
         # Concatenate meta features with original features
         meta_features = np.hstack([X] + meta_features)
@@ -77,6 +78,7 @@ class OOFRegressor(BaseEstimator, RegressorMixin):
         for model in self.base_models:
             oof_preds = cross_val_predict(model, X, y, cv=5, method="predict", n_jobs=-1)  # Generate out-of-fold predictions
             meta_features.append(oof_preds.reshape(-1, 1))
+            model.fit(X, y)
 
         # Concatenate meta features with original features
         meta_features = np.hstack([X] + meta_features)

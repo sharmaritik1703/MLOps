@@ -1,4 +1,4 @@
-from sklearn.base import BaseEstimator, ClassifierMixin
+from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.model_selection import cross_val_predict
 import numpy as np
 

@@ -178,4 +178,4 @@ def get_evaluation_metrics(X, y, model, task):
     else:
         r2 = r2_score(y, model.predict(X))
         mae = mean_absolute_error(y, model.predict(X))
-        return {"R2 Score": r2, "MAE": -mae}
+        return {"R2 Score": r2, "MAE": mae}

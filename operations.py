@@ -108,7 +108,7 @@ def get_hypertuned_model(X, y, model, param_grid, score_metric):
 
 def get_cross_validation_scores(X, y, model, task: str):
     """
-    Calculates average performance of ML model in cross-validation. It is usually evaluated for the training set in which model is trained.
+    Calculates the performance of the ML model in each fold (cross-validation). It is usually evaluated for the training set in which the model is trained.
 
     args:
         X: input features

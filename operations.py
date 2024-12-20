@@ -102,7 +102,7 @@ def get_hypertuned_model(X, y, model, param_grid, score_metric, imbalance: bool 
         The hyper-tuned model, along with the optimal parameters
     """
     # Selecting cross-validation type based upon data imbalance
-    kf = StratifiedKFold(n_splits=5, shuffle=True) if imbalance else KFold(n_splits=5, shuffle=True)
+    kf = StratifiedKFold(n_splits=5, shuffle=True, random_state=10) if imbalance else KFold(n_splits=5, shuffle=True, random_state=10)
     
     # Hyperparameter search instance! 
     search = RandomizedSearchCV(model, param_grid, cv=kf, scoring=score_metric, random_state=10, n_jobs=-1)

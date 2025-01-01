@@ -32,7 +32,7 @@ class GMM(GaussianMixture):
         """
         return super().predict(X)
     
-    def resample(self, X, y):
+    def fit_resample(self, X, y):
         """
         Perform oversampling to balance the classes.
         
@@ -48,6 +48,9 @@ class GMM(GaussianMixture):
         y_resampled : array, shape (n_samples_new,)
             The resampled class labels.
         """
+        # Training the GMM model!
+        self.fit(X)
+        
         # Get the unique classes and their counts
         classes, counts = np.unique(y, return_counts=True)
         
